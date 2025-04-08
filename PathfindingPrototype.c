@@ -29,7 +29,7 @@ int main(void){
         flagy = my - hy;
     }
     while(hx != mx || hy != my && steps !=10){
-        for(i=1; i< flagx+1; i++){
+        for(i=1; i< flagx+1; i++){ // needs redo
             if(table[mx+i][my] == '#' || table[mx+i][my] == '@'){
                 break;
             }
