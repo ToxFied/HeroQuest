@@ -95,7 +95,7 @@ int play(int dif, int herolist[], int table[][], int m, int n){
 	int i, j, healthtable[4] ={0}, count;
 	char *names[4]={0};
 
-	showtable(table, m, n);
+	showtable(table, m, n); //i hate niggers
 	printf("\n\n");
 
 	for(i=0; i<4; i++){
