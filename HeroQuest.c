@@ -15,7 +15,7 @@ int main(void){
 	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=1, *pheros = &heros, count, n, m, dif=1, *pdif = &dif, check;
 	n = 6; // n is the lines of the table
 	m = 12;  // m is the rows of the table
-	printf("i hate nigs");
+	printf("i hate nigs?");
 	while(1){
 		srand = rand(time(NULL));
 		check = mmenu();
