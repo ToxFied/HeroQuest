@@ -15,7 +15,6 @@ int main(void){
 	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=1, *pheros = &heros, count, n, m, dif=1, *pdif = &dif, check;
 	n = 6; // n is the lines of the table
 	m = 12;  // m is the rows of the table
-	printf("i hate nigs?");
 	while(1){
 		srand = rand(time(NULL));
 		check = mmenu();
@@ -96,7 +95,7 @@ int play(int dif, int herolist[], int table[][], int m, int n){
 	int i, j, healthtable[4] ={0}, count;
 	char *names[4]={0};
 
-	showtable(table, m, n); //i hate niggers
+	showtable(table, m, n);
 	printf("\n\n");
 
 	for(i=0; i<4; i++){
