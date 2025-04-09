@@ -34,16 +34,16 @@ int main(void){
                 break;
             }
             else{
-                cmx++;
+                cmx++; // move right
                 steps++;
             }
         }
-        for(i=0; i<flagy; i++){
+        for(i=0; i<flagy; i++){ // needs redo
             if(table[mx][my+i] == '#' || table[mx][my+i] == '@'){
                 break;
             }
             else{
-                cmy++;
+                cmy++; // move down 
                 steps++;
             }
         }

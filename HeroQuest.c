@@ -15,7 +15,7 @@ int main(void){
 	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0}, monsters_pos[6][2][1] = {0};
 	n = 6; // n = lines of the table
 	m = 12; // m = rows of the table
-	while(1){
+	while(1){ 
 		srand(time(NULL));
 		check = mmenu();
 		switch(check){
@@ -80,15 +80,13 @@ int mmenu()
 	}
 	return choice;
 }
-
 void help(){
 	system("clear");
 	printf("\n\t\t\033[1mNSTRUCTIONS\033[0m\n\n");
 	printf("\033[4mHow to play:\033[0m \n\n");
 	printf("\033[3;92mHeroQuest\033[0m is a game of dungeons with monsters that you have to slay\n");
 	printf("You select with which heros you want to play (or all of them) and\n");
-	printf("fight the spawns of \033[95mZARGON\033[0m to advance into the next dungeon.\n");
-	printf("");
+	printf("fight the spawns of \033[95mZARGON\033[0m to advance into the next dungeon.\n\n");
 }
 
 int play(int dif, int herolist[], int **table, int m, int n){
@@ -101,16 +99,16 @@ int play(int dif, int herolist[], int **table, int m, int n){
 	for(i=0; i<4; i++){
 		switch(herolist[i]){
 			case 'B':
-				healthtable[i] = 8;
+				healthtable[i] = 8; // barbarian
 				break;
 			case 'D' :
-				healthtable[i] = 7;
+				healthtable[i] = 7; // dwarf
 				break;
 			case 'E':
-				healthtable[i] = 6;
+				healthtable[i] = 6; // elf
 				break;
 			case 'W':
-				healthtable[i] = 4;
+				healthtable[i] = 4; // wizard
 				break;
 		}
 	}
@@ -121,7 +119,7 @@ int play(int dif, int herolist[], int **table, int m, int n){
         }
     }
 
-    for(i=0; i<4; i++){
+    for(i=0; i<4; i++){ 
 		switch(herolist[i]){
 			case 'B':
 				names[i] = "Barbarian";
@@ -138,7 +136,7 @@ int play(int dif, int herolist[], int **table, int m, int n){
 		}
     }
 
-	for(i=0;i<count; i++){
+	for(i=0;i<count; i++){ 
 		printf("%s: \033[92;1m%dHP\033[0m \n", names[i], healthtable[i]);  // prints the health of each selected hero
 	}
 	printf("\n");
@@ -160,7 +158,7 @@ void settings(int *pdif, int *pheros){
 			scanf("%d", &choice);
 			printf("\n");
 		}
-		if(choice == 3){ // exit settings
+		if(choice == 3){
 			return;
 		}
 		else if(choice == 1){
@@ -197,7 +195,7 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
 	{
 		if(door1==i) // adding the first door
 			continue;
-		table[i][wall1] = '#';
+		table[i][wall1] = '#'; 
 	}
 	wall2 = (rand() % (m-4))+2;
 	while(wall2 == door1){  // check if wall falls on the door of the first wall
@@ -213,12 +211,12 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
 	door2 = (rand() % wallcount);
 	table[wall2][door2] = 0; // adding the door on the second wall
 
-	for(i=0; i<3; i++);  // add the furnitures
+	for(i=0; i<3; i++);  // add the furniture
 	{
 		while(1){
 			luckn = rand() % n;
 			luckm = rand() % m;
-			if(table[luckn][luckm]=='#')
+			if(table[luckn][luckm]=='#') 
 			{
 				continue;
 			}
@@ -227,7 +225,7 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
 				break;
 			}
         }
-		table[luckn][luckm] = '@';
+		table[luckn][luckm] = '@'; 
 	}
 
 	for(i=0;i<heros;i++){  // spawning heroes
@@ -254,24 +252,24 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
             continue;
         }
 
-		heroes_pos[i][0] = luckn; // seems that *table[] declared above is the problem... EDIT: Fixed.
-		heroes_pos[i][1] = luckm;
+		heroes_pos[i][0] = luckn; // heroes position of x
+		heroes_pos[i][1] = luckm; // heroes position of y
 	}
     switch(dif){  // deciding number of monsters
         case 1:
-            monsters = (rand() % 2) +1;
+            monsters = (rand() % 2) +1; // Child's Play
             break;
         case 2:
-            monsters = (rand() % 4) +1;
+            monsters = (rand() % 4) +1; // Medium
             break;
         case 3:
-            monsters = (rand() % 6) +1;
+            monsters = (rand() % 6) +1; // Hurt me plenty	
             break;
     }
     for(i=0;i<monsters;i++) { // spawning monsters
         flag = 0;
 		while(1){ // Infinite loop to find a free spot for a monster
-			luckn = rand() % n;
+			luckn = rand() % n; 
 			luckm = rand() % m;
 			if(table[luckn][luckm]=='#' || table[luckn][luckm]=='@')
 			{
@@ -282,7 +280,7 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
 				break;
 			}
 	    }
-        for(i=0;i<heros;i++){
+        for(i=0;i<heros;i++){ 
             if(table[luckn][luckm] == herolist[i]){
                 flag++;
 				break;
@@ -292,7 +290,7 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
             i--;
             continue;
         }
-		for(i=0;i<monsters;i++){
+		for(i=0;i<monsters;i++){ // check if the spot is already taken by a monster or a hero
             if(table[luckn][luckm] >='0' && table[luckn][luckm] <='9'){
                 flag++;
 				break;
@@ -303,8 +301,8 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
             continue;
         }
 
-		monsters_pos[i][0][0] = luckn;
-		monsters_pos[i][1][0] = luckm;
+		monsters_pos[i][0][0] = luckn; // monsters position of x
+		monsters_pos[i][1][0] = luckm; // monsters position of y
 
 		switch(dif){
 			case 1: // Child's Play
@@ -320,7 +318,7 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
 						health = '3';
 						break;
 				}
-			case 2:
+			case 2: // Medium
 				health = (rand() % 3) +4;
 				switch(health){
 					case 4:
@@ -349,7 +347,7 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
 		}
 		table[luckn][luckm] = health;
     }
-	for(i=0; i<n; i++){
+	for(i=0; i<n; i++){ // filling the table with '.'
 		for(j=0; j<m; j++){
 			if(table[i][j] == 0){
 				table[i][j] = '.';
@@ -362,7 +360,7 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
 void showtable(int **table, int m, int n){
 	int i, j, k;
 	system("clear");
-	printf("\n    \033[4m ");
+	printf("\n    \033[4m "); 
     
     for(k=0; k<m-1; k++){
         printf("%c ", 'A' +k);
@@ -370,7 +368,7 @@ void showtable(int **table, int m, int n){
     printf("%c", 'A' + k);
     printf("\033[0m\n");
     
-    for(k=0; k<n; k++){
+    for(k=0; k<n; k++){ 
         printf(" %d %c", k+1, 222); // left border
         for( i = 0; i < m; i++) {
             printf(" %c", table[k][i]);
