@@ -8,11 +8,11 @@ int mmenu();  // main menu
 int play(int dif, int herolist[], int **table, int m, int n);    // starting the game
 void settings(int *pdif, int* pheros);  // name says it all
 void help();
-void maketable(int heros, int **heroes_pos, int herolist[], int dif, int n, int m, int **table); // map generation and loading
+void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[], int dif, int n, int m, int **table); // map generation and loading
 void showtable(int **table, int m, int n);
 
 int main(void){
-	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0};
+	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0}, monsters_pos[6][2][1] = {0};
 	n = 6; // n is the lines of the table
 	m = 12;  // m is the rows of the table
 	while(1){
@@ -43,7 +43,7 @@ int main(void){
 					}
 					herolist[i] = select; //enter the hero
 				}
-				maketable(heros, heroes_pos, herolist, dif, n, m, table); // map generation
+				maketable(heros, heroes_pos, monsters_pos, herolist, dif, n, m, table); // map generation
 				play(dif, herolist, table, m, n);
 				break;
 			case 2:
@@ -189,7 +189,7 @@ void settings(int *pdif, int *pheros){
 	}
 }
 
-void maketable(int heros, int **heroes_pos, int herolist[], int dif, int n, int m, int **table){
+void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[], int dif, int n, int m, int **table){
 	int i, j, luckn, luckm, wall1, door1, wall2, door2, flag=0, monsters, health, wallcount=0;
 	wall1 = (rand() % (m-4))+2;
 	door1 = (rand() % (n-4))+2;
@@ -302,6 +302,10 @@ void maketable(int heros, int **heroes_pos, int herolist[], int dif, int n, int 
             i--;
             continue;
         }
+
+		monsters_pos[i][0][0] = luckn;
+		monsters_pos[i][1][0] = luckm;
+
 		switch(dif){
 			case 1: // Child's Play
 				health = (rand() % 3) +1;
