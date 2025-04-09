@@ -230,7 +230,7 @@ void maketable(int heros, int **heroes_pos, int herolist[], int dif, int n, int 
 		table[luckn][luckm] = '@';
 	}
 
-	for(i=0;i<heros;i++) {  // spawning heroes
+	for(i=0;i<heros;i++){  // spawning heroes
         flag = 0;
 		while(1){
 			luckn = rand() % n;
@@ -268,12 +268,12 @@ void maketable(int heros, int **heroes_pos, int herolist[], int dif, int n, int 
             monsters = (rand() % 6) +1;
             break;
     }
-    for(i=0;i<monsters;i++) {
-        flag =0;
-		while(1){
+    for(i=0;i<monsters;i++) { // spawning monsters
+        flag = 0;
+		while(1){ // Infinite loop to find a free spot for a monster
 			luckn = rand() % n;
 			luckm = rand() % m;
-			if(table[luckn][luckm]= '#' || table[luckn][luckm]=='@')
+			if(table[luckn][luckm]=='#' || table[luckn][luckm]=='@')
 			{
 				continue;
 			}
