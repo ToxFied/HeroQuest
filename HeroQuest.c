@@ -5,18 +5,18 @@
 #include <string.h>
 
 int mmenu();  // main menu
-int play(int dif, int herolist[], int table[][], int m, int n);    // starting the game
+int play(int dif, int herolist[], int **table, int m, int n);    // starting the game
 void settings(int *pdif, int* pheros);  // name says it all
 void help();
-void maketable(int heros, int dif, int n, int m, int table[][]); // map generation and loading
-void showtable(int table[][], int m, int n);
+void maketable(int heros, int **heroes_pos, int herolist[], int dif, int n, int m, int **table); // map generation and loading
+void showtable(int **table, int m, int n);
 
 int main(void){
-	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check;
+	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0};
 	n = 6; // n is the lines of the table
 	m = 12;  // m is the rows of the table
 	while(1){
-		srand = rand(time(NULL));
+		srand(time(NULL));
 		check = mmenu();
 		switch(check){
 			case 1:
@@ -43,7 +43,7 @@ int main(void){
 					}
 					herolist[i] = select; //enter the hero
 				}
-				maketable(heros, herolist, dif, n, m, table); // map generation
+				maketable(heros, heroes_pos, herolist, dif, n, m, table); // map generation
 				play(dif, herolist, table, m, n);
 				break;
 			case 2:
@@ -91,7 +91,7 @@ void help(){
 	printf("");
 }
 
-int play(int dif, int herolist[], int table[][], int m, int n){
+int play(int dif, int herolist[], int **table, int m, int n){
 	int i, j, healthtable[4] ={0}, count;
 	char *names[4]={0};
 
@@ -177,7 +177,7 @@ void settings(int *pdif, int *pheros){
 			}
 		}
 		else if(choice==2){
-			printf("Select with how many heros you going to play(1-4): ") // default: 2
+			printf("Select with how many heros you going to play(1-4): "); // default: 2
 			scanf("%d", pheros);
 			printf("\n");
 			while(*pheros<1 || *pheros > 4){
@@ -189,31 +189,31 @@ void settings(int *pdif, int *pheros){
 	}
 }
 
-void maketable(int heros, int dif, int n, int m, int table[][]){
-	int i, j, luckn, luckm, luckln1, luckp1, luckln2, luckp2, flag=0, mosters, health, wallcount=0;
-	luckln1 = (rand() % (m-4))+2;
-	luckp1 = (rand() % (n-4))+2;
+void maketable(int heros, int **heroes_pos, int herolist[], int dif, int n, int m, int **table){
+	int i, j, luckn, luckm, wall1, door1, wall2, door2, flag=0, monsters, health, wallcount=0;
+	wall1 = (rand() % (m-4))+2;
+	door1 = (rand() % (n-4))+2;
 	for(i=0; i<n; i++)  // adding the first horizontal wall
 	{
-		if(luckp1==i) // adding the first door
+		if(door1==i) // adding the first door
 			continue;
-		table[i][luckln1] = '#';
+		table[i][wall1] = '#';
 	}
-	luckln2 = (rand() % (m-4))+2;
-	while(luckln2 == luckp1){  // check if wall falls on the door of the first wall
-		luck4 = (rand() % (m-4))+2;
+	wall2 = (rand() % (m-4))+2;
+	while(wall2 == door1){  // check if wall falls on the door of the first wall
+		wall2 = (rand() % (m-4))+2;
 	}
 	for(i=0; i<m; i++) // adding the second vertical wall
 	{
-        if(table[luckln2][i]=='#') //stop when you find a wall
+        if(table[wall2][i]=='#') //stop when you find a wall
 			break;
-		table[luckln2][i] = '#';
-		wallcount++; // count how many walls we got to make the door
+		table[wall2][i] = '#';
+		wallcount++; // count the number of cells that a wall occupies in order to input a door
 	}
-	luckp2 = (rand() % wallcount);
-	table[luckln2][luckp2] = 0; //adding the door on the second wall
+	door2 = (rand() % wallcount);
+	table[wall2][door2] = 0; // adding the door on the second wall
 
-	for(i=0; i<3; i++);  //add the furnitures
+	for(i=0; i<3; i++);  // add the furnitures
 	{
 		while(1){
 			luckn = rand() % n;
@@ -229,12 +229,13 @@ void maketable(int heros, int dif, int n, int m, int table[][]){
         }
 		table[luckn][luckm] = '@';
 	}
+
 	for(i=0;i<heros;i++) {  // spawning heroes
-        flag =0;
+        flag = 0;
 		while(1){
 			luckn = rand() % n;
 			luckm = rand() % m;
-			if(table[luckn][luckm]= '#' || table[luckn][luckm]=='@')
+			if(table[luckn][luckm] = '#' || table[luckn][luckm] == '@')
 			{
 				continue;
 			}
@@ -252,7 +253,10 @@ void maketable(int heros, int dif, int n, int m, int table[][]){
             i--;
             continue;
         }
-    }
+
+		heroes_pos[i][0] = luckn; // seems that *table[] declared above is the problem... EDIT: Fixed.
+		heroes_pos[i][1] = luckm;
+	}
     switch(dif){  // deciding number of monsters
         case 1:
             monsters = (rand() % 2) +1;
@@ -299,7 +303,7 @@ void maketable(int heros, int dif, int n, int m, int table[][]){
             continue;
         }
 		switch(dif){
-			case 1:
+			case 1: // Child's Play
 				health = (rand() % 3) +1;
 				switch(health){
 					case 1:
@@ -351,7 +355,7 @@ void maketable(int heros, int dif, int n, int m, int table[][]){
 	return;
 }
 
-void showtable(int table[][], int m, int n){
+void showtable(int **table, int m, int n){
 	int i, j, k;
 	system("clear");
 	printf("\n    \033[4m ");
