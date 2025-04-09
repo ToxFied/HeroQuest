@@ -4,17 +4,17 @@
 #include <ctype.h>
 #include <string.h>
 
-int mmenu();  // main menu
-int play(int dif, int herolist[], int **table, int m, int n);    // starting the game
-void settings(int *pdif, int* pheros);  // name says it all
+int mmenu(); // main menu
+int play(int dif, int herolist[], int **table, int m, int n); // starting the game
+void settings(int *pdif, int* pheros); // name says it all
 void help();
 void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[], int dif, int n, int m, int **table); // map generation and loading
 void showtable(int **table, int m, int n);
 
 int main(void){
 	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0}, monsters_pos[6][2][1] = {0};
-	n = 6; // n is the lines of the table
-	m = 12;  // m is the rows of the table
+	n = 6; // n = lines of the table
+	m = 12; // m = rows of the table
 	while(1){
 		srand(time(NULL));
 		check = mmenu();
