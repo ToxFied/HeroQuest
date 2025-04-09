@@ -12,7 +12,7 @@ void maketable(int heros, int dif, int n, int m, int table[][]); // map generati
 void showtable(int table[][], int m, int n);
 
 int main(void){
-	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=1, *pheros = &heros, count, n, m, dif=1, *pdif = &dif, check;
+	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check;
 	n = 6; // n is the lines of the table
 	m = 12;  // m is the rows of the table
 	while(1){
@@ -160,12 +160,12 @@ void settings(int *pdif, int *pheros){
 			scanf("%d", &choice);
 			printf("\n");
 		}
-		if(choice == 3){
+		if(choice == 3){ // exit settings
 			return;
 		}
 		else if(choice == 1){
 			printf("Child's Play(1)\n");
-			printf("Medium(2)\n");
+			printf("Medium(2)\n"); // default
 			printf("Hurt me plenty!(3)\n");
 			printf("\nSelect a difficulty!: ");
 			scanf("%d", pdif);
@@ -177,7 +177,7 @@ void settings(int *pdif, int *pheros){
 			}
 		}
 		else if(choice==2){
-			printf("Select with how many heros you going to play(1-4): ")
+			printf("Select with how many heros you going to play(1-4): ") // default: 2
 			scanf("%d", pheros);
 			printf("\n");
 			while(*pheros<1 || *pheros > 4){
