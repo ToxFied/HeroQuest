@@ -12,9 +12,32 @@ void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[],
 void showtable(int **table, int m, int n);
 
 int main(void){
-	int i, j, table[6][12] = {0}, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0}, monsters_pos[6][2][1] = {0};
+	int i, j, **table, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0}, monsters_pos[6][2][1] = {0};
 	n = 6; // n = lines of the table
 	m = 12; // m = rows of the table
+	
+	table = (int **)malloc(n * sizeof(int *)); // allocate memory for the dynamic 2D array
+	if (table == NULL) {
+		printf("Memory allocation failed\n");
+		return 1;
+	}
+	
+	for (i = 0; i < n; i++){
+		table[i] = (int *)malloc(m * sizeof(int));
+		if (table[i] == NULL){
+			for (j = 0; j < i; j++) { // free previously allocated memory
+				free(table[j]);
+			}
+			free(table);
+			printf("Memory allocation failed\n");
+			
+			return 1;
+		}
+		for (j = 0; j < m; j++) { // set all elements to 0
+			table[i][j] = 0;
+		}
+	}
+	
 	while(1){ 
 		srand(time(NULL));
 		check = mmenu();
@@ -53,6 +76,11 @@ int main(void){
 				settings(pdif, pheros);
 				break;
 			case 4:
+			
+				for (i = 0; i < n; i++) { // free allocated memory before exiting
+					free(table[i]);
+				}
+				free(table);
 				return 1;
 		}
 		
