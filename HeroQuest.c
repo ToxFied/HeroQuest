@@ -5,20 +5,24 @@
 #include <string.h>
 
 int mmenu(); // main menu
-int play(int dif, int herolist[], int **table, int m, int n); // starting the game
+int play(int dif, int herolist[], int **table, int m, int n, int monsters_pos, int **table, int n, int m, int wall1, int wall2, int door1, int door2); // starting the game
 void settings(int *pdif, int* pheros); // name says it all
 void help();
+void pathfinder(int monsters_pos, int isdoor, int **table, int n, int m, int dest[], int wall1, int wall2, int door1, int door2, int moves[]);
 void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[], int dif, int n, int m, int **table); // map generation and loading
 void showtable(int **table, int m, int n);
 
 int main(void){
-	int i, j, **table, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m, dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0}, monsters_pos[6][2][1] = {0};
+	int i, j, **table, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m;
+	int dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0}, monsters_pos[6][2][1] = {0};
+	int wall1 = 0, door1 = 0, wall2 = 0, door2 = 0;
 	n = 6; // n = lines of the table
 	m = 12; // m = rows of the table
 	
 	table = (int **)malloc(n * sizeof(int *)); // allocate memory for the dynamic 2D array
 	if (table == NULL) {
 		printf("Memory allocation failed\n");
+		free(table);
 		return 1;
 	}
 	
@@ -117,7 +121,7 @@ void help(){
 	printf("fight the spawns of \033[95mZARGON\033[0m to advance into the next dungeon.\n\n");
 }
 
-int play(int dif, int herolist[], int **table, int m, int n){
+int play(int dif, int herolist[], int **table, int ***monsters_pos, int m, int n){
 	int i, j, healthtable[4] ={0}, count;
 	char *names[4]={0};
 
@@ -169,7 +173,7 @@ int play(int dif, int herolist[], int **table, int m, int n){
 	}
 	printf("\n");
 
-	
+	if(monster_pos)
 
 }
 
