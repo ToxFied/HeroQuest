@@ -4,49 +4,60 @@
 #include <ctype.h>
 #include <string.h>
 
-int main(void){
+int main(void)
+{                                                                                      //w1
     int steps = 0, xytab[10][2]={0}, i, j, table[6][12] = { '.','.','@','.','.','.','.','#','.','.','7','.',
                                                             '.','.','.','.','.','.','.','#','.','.','.','.',
-                                                            '#','#','#','#','.','#','#','#','.','.','.','.',
+                                                   /*w2*/   '#','#','#','#','.','#','#','#','.','.','.','.',
                                                             '.','.','.','.','.','.','.','.','.','.','@','.',
                                                             '.','B','.','.','.','.','.','#','.','.','.','.',
                                                             '.','.','.','.','.','.','@','#','.','.','.','.'};
-    int hx = 4, hy = 1;
-    int mx = 0, my = 10;
-    int n = 6;
-    int m = 12;
-    int cmx = mx, cmy = my, flagx=0, flagy =0;
-    if(hx> mx){
-        flagx = hx - mx;
-    }
-    else{
-        flagx = mx - hx;
-    }
-    if(hy > my){
-        flagy = hy - my;
-    }
-    else{
-        flagy = my - hy;
-    }
-    while(hx != mx || hy != my && steps !=10){
-        for(i=1; i< flagx+1; i++){ // needs redo
-            if(table[mx+i][my] == '#' || table[mx+i][my] == '@'){
-                break;
-            }
-            else{
-                cmx++; // move right
-                steps++;
-            }
-        }
-        for(i=0; i<flagy; i++){ // needs redo
-            if(table[mx][my+i] == '#' || table[mx][my+i] == '@'){
-                break;
-            }
-            else{
-                cmy++; // move down 
-                steps++;
-            }
+
+    int monsters_pos, isdoor, **table, n, m, dest[2], wall1, wall2, door1, door2, moves[10][2], sameroom, x;
+    int heroes_pos[4][2], mcount= 0;
+
+    for(i=0; i<6; i++){
+        if( monsters_pos[i] >= 1 && monsters_pos[i] <= 9 ){
+            mcount++;
         }
     }
-    return 0;
+
+    for(i=0; i<mcount; i++){
+
+        while (sameroom) {
+        if (monsters_pos[i][1][0] < wall2 && monsters_pos[i][0][0] < wall1){
+            if (heroes_pos[i][1] <  wall2 && heroes_pos[i][0] < wall2){
+                //move monster to heros pos
+            } else {
+                if ( wall2 < door1) {
+                    //move to door 2
+                } else {
+                    // move to door 1
+                }
+            }
+        } else if (monsters_pos[i][1][0] > wall2 && monsters_pos[i][0][0] < wall1) {
+            if (heroes_pos[i][1] >  wall2 && heroes_pos[i][0] < wall1){
+                //move monster to heros pos
+            } else {
+                //move to door 1
+            }
+        } else {
+            if (heroes_pos[i][1] >  wall1){
+                //move to heroes pos
+            } else {
+                //move to door 1
+                if (heroes_pos[i][1] >  wall2 && heroes_pos[i][0] < wall1){
+                    //move to heroes pos
+                } else {
+                    //move to door 2
+                }
+            }
+        }
+    }
+}
+
+    
+
+
+
 }

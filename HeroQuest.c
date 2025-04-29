@@ -5,7 +5,7 @@
 #include <string.h>
 
 int mmenu(); // main menu
-int play(int dif, int herolist[], int **table, int m, int n, int monsters_pos, int **table, int n, int m, int wall1, int wall2, int door1, int door2); // starting the game
+int play(int dif, int herolist[], int **table, int m, int n, int monsters_pos, int wall1, int wall2, int door1, int door2); // starting the game
 void settings(int *pdif, int* pheros); // name says it all
 void help();
 void pathfinder(int monsters_pos, int isdoor, int **table, int n, int m, int dest[], int wall1, int wall2, int door1, int door2, int moves[]);
@@ -71,7 +71,7 @@ int main(void){
 					herolist[i] = select; //enter the hero
 				}
 				maketable(heros, heroes_pos, monsters_pos, herolist, dif, n, m, table); // map generation
-				play(dif, herolist, table, m, n);
+				play(dif, herolist, table, m, n, monsters_pos, wall1, wall2, door1, door2);
 				break;
 			case 2:
 				help();
@@ -121,8 +121,8 @@ void help(){
 	printf("fight the spawns of \033[95mZARGON\033[0m to advance into the next dungeon.\n\n");
 }
 
-int play(int dif, int herolist[], int **table, int ***monsters_pos, int m, int n){
-	int i, j, healthtable[4] ={0}, count;
+int play(int dif, int herolist[], int **table, int m, int n, int monsters_pos, int wall1, int wall2, int door1, int door2){
+	int i, j, healthtable[4] ={0}, count = 0;
 	char *names[4]={0};
 
 	showtable(table, m, n);
