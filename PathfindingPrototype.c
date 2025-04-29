@@ -25,7 +25,7 @@ int main(void)
     for(i=0; i<mcount; i++){
 
         while (sameroom) {
-        if (monsters_pos[i][1][0] < wall2 && monsters_pos[i][0][0] < wall1){
+        if (monsters_pos[i][1][0] < wall2 && monsters_pos[i][0][0] < wall1){ //room 1
             if (heroes_pos[i][1] <  wall2 && heroes_pos[i][0] < wall2){
                 //move monster to heros pos
             } else {
@@ -35,13 +35,13 @@ int main(void)
                     // move to door 1
                 }
             }
-        } else if (monsters_pos[i][1][0] > wall2 && monsters_pos[i][0][0] < wall1) {
+        } else if (monsters_pos[i][1][0] > wall2 && monsters_pos[i][0][0] < wall1) { //room 2
             if (heroes_pos[i][1] >  wall2 && heroes_pos[i][0] < wall1){
                 //move monster to heros pos
             } else {
                 //move to door 1
             }
-        } else {
+        } else { // room 3
             if (heroes_pos[i][1] >  wall1){
                 //move to heroes pos
             } else {
