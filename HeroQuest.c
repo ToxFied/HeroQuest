@@ -5,19 +5,18 @@
 #include <string.h>
 
 int mmenu(); // main menu
-int play(int dif, int herolist[], int **table, int m, int n, int monsters_pos, int wall1, int wall2, int door1, int door2); // starting the game
+int play(int dif, int herolist[], int **table, int m, int n, int monsters_pos); // starting the game
 void settings(int *pdif, int* pheros); // name says it all
 void help();
-void pathfinder(int monsters_pos, int isdoor, int **table, int n, int m, int dest[], int wall1, int wall2, int door1, int door2, int moves[]);
-void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[], int dif, int n, int m, int **table); // map generation and loading
+void pathfinder(int monsters_pos, int isdoor, int **table, int n, int m, int dest[], int moves[]);
+void maketable(int heros, int **heroes_pos, int **monsters_pos, int herolist[], int dif, int n, int m, int **table); // map generation and loading
 void showtable(int **table, int m, int n);
 
 int main(void){
 	int i, j, **table, herolist[4] = {0}, select, flag=0, heros=2, *pheros = &heros, count, n, m;
 	int dif=2, *pdif = &dif, check, heroes_pos[4][2] = {0}, monsters_pos[6][2][1] = {0};
-	int wall1 = 0, door1 = 0, wall2 = 0, door2 = 0;
-	n = 6; // n = lines of the table
-	m = 12; // m = rows of the table
+	n = 17; // n = lines of the table
+	m = 22; // m = rows of the table
 	
 	table = (int **)malloc(n * sizeof(int *)); // allocate memory for the dynamic 2D array
 	if (table == NULL) {
@@ -71,7 +70,7 @@ int main(void){
 					herolist[i] = select; //enter the hero
 				}
 				maketable(heros, heroes_pos, monsters_pos, herolist, dif, n, m, table); // map generation
-				play(dif, herolist, table, m, n, monsters_pos, wall1, wall2, door1, door2);
+				play(dif, herolist, table, m, n, monsters_pos);
 				break;
 			case 2:
 				help();
@@ -121,7 +120,7 @@ void help(){
 	printf("fight the spawns of \033[95mZARGON\033[0m to advance into the next dungeon.\n\n");
 }
 
-int play(int dif, int herolist[], int **table, int m, int n, int monsters_pos, int wall1, int wall2, int door1, int door2){
+int play(int dif, int herolist[], int **table, int m, int n, int monsters_pos){
 	int i, j, healthtable[4] ={0}, count = 0;
 	char *names[4]={0};
 
@@ -220,72 +219,8 @@ void settings(int *pdif, int *pheros){
 }
 
 void maketable(int heros, int **heroes_pos, int ***monsters_pos, int herolist[], int dif, int n, int m, int **table){
-	int i, j, luckn, luckm, wall1, door1, wall2, door2, flag=0, monsters, health, wallcount=0;
-	wall1 = (rand() % (m-4))+2;
-	door1 = (rand() % (n-4))+2;
-	for(i=0; i<n; i++)  // adding the first horizontal wall
-	{
-		if(door1==i) // adding the first door
-			continue;
-		table[i][wall1] = '#'; 
-	}
-	wall2 = (rand() % (m-4))+2;
-	while(wall2 == door1){  // check if wall falls on the door of the first wall
-		wall2 = (rand() % (m-4))+2;
-	}
-	for(i=0; i<m; i++) // adding the second vertical wall
-	{
-        if(table[wall2][i]=='#') //stop when you find a wall
-			break;
-		table[wall2][i] = '#';
-		wallcount++; // count the number of cells that a wall occupies in order to input a door
-	}
-	door2 = (rand() % wallcount);
-	table[wall2][door2] = 0; // adding the door on the second wall
+	int i, j, flag=0, monsters, health, wallcount=0;
 
-	for(i=0; i<3; i++);  // add the furniture
-	{
-		while(1){
-			luckn = rand() % n;
-			luckm = rand() % m;
-			if(table[luckn][luckm]=='#') 
-			{
-				continue;
-			}
-			else
-			{
-				break;
-			}
-        }
-		table[luckn][luckm] = '@'; 
-	}
-
-	for(i=0;i<heros;i++){  // spawning heroes
-        flag = 0;
-		while(1){
-			luckn = rand() % n;
-			luckm = rand() % m;
-			if(table[luckn][luckm] = '#' || table[luckn][luckm] == '@')
-			{
-				continue;
-			}
-			else
-			{
-				break;
-			}
-	    }
-        for(i=0;i<heros;i++){
-            if(table[luckn][luckm] == herolist[i]){
-                flag++;
-            }
-        }
-        if(flag){
-            i--;
-            continue;
-        }
-
-		heroes_pos[i][0] = luckn; // heroes position of x
-		heroes_pos[i][1] = luckm; // heroes position of y
 	}
     switch(dif){  // deciding number of monsters
         case 1:
