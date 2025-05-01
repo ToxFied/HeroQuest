@@ -1,8 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <ctype.h>
-#include <string.h>
 
 int main(void) {
     int **table;
@@ -37,20 +34,38 @@ int main(void) {
             }
         }
     }
-    int k;
-	printf("\n    \033[4m "); 
-    
-    for(k=0; k<m-1; k++){
-        printf("%c ", 'A' +k);
+
+    for(int l =0; l<level ; l++){
+        int k =i;
+        for(i=11; i<k+10; i++){
+            for(j=0; j<m; j++){
+                table[i][j] = ' ';
+                if(i == 11 && (j<7 || j>9)){
+                    table[i][j] = '#';
+                }
+                else if(i > 11 && i<k+9){
+                    if(j==0 || j==m-1){
+                        table[i][j] = '#';
+                    }
+                }
+            }
+        }
     }
-    printf("%c ", 'A' + k);
-    printf("\033[0m\n");
-    
-    for(k=0; k<n; k++){ 
-        printf(" %.2d %c", k+1, 124);
-        for( i = 0; i < m; i++) {
-            printf("%c ", table[k][i]);
+
+    // Print the stage
+    for(i = 0; i < n; i++) {
+        printf("\t\t");
+        for(j = 0; j < m; j++) {
+            printf("%c", table[i][j]);
         }
         printf("\n");
     }
+
+    // Free allocated memory
+    for(i = 0; i < n; i++) {
+        free(table[i]);
+    }
+    free(table);
+
+    return 0;
 }
