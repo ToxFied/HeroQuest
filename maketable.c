@@ -36,7 +36,7 @@ int main(void) {
     }
 
     for(int l =0; l<level ; l++){
-        int k =i;
+        int k =11;
         for(i=11; i<k+10; i++){
             for(j=0; j<m; j++){
                 table[i][j] = ' ';
