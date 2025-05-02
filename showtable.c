@@ -6,11 +6,10 @@
 
 int main(void) {
     int **table;
-    int n = 22, m = 17, i, j, level = 1, ishashtag = 0, top1=0, bottom1=0, luckn, luckm;
+    int n = 22, m = 17, i, j, level = 1, ishashtag = 0, luckn, luckm;
 
     srand(time(NULL));
 
-    // Allocate memory for the table
     table = (int**) malloc(n * sizeof(int*));
     for(i = 0; i < n; i++) {
         table[i] = (int*) malloc(m * sizeof(int));
@@ -48,8 +47,8 @@ int main(void) {
                 if(i == k && (j<7 || j>9)){
                     table[i][j] = '#';
                 }
-                else if(i > 11 && i<k+10){
-                    if((j==0 || j==m-1)){
+                else if(i > 11 && i < k+10){
+                    if((j == 0 || j == m - 1)){
                         table[i][j] = '#';
                     }
                     if(((j == 6 || j == 10) && !(k+5 == i))){
@@ -60,11 +59,11 @@ int main(void) {
         }
         k+=10;
     }
-    for(j=0;j<m;j++){
+    for(j=0;j<m;j++){ // bottom wall
         table[i][j] = '#';
     }
     
-    
+    // filling the floor
     for (i = 1; i < 12; i++) {
         ishashtag = 0;
         for (j = 0; j < m; j++) {
@@ -105,7 +104,6 @@ int main(void) {
     }
     
     k=11;
-
     for(i=0; i<level; i++){
         for (j=0; j<2; j++) {
             luckm = (rand() % 5)+11;
@@ -137,19 +135,18 @@ int main(void) {
             }
         }
     }
-
 	printf("\n     \033[4m "); 
 
     for(k=0; k<m-1; k++){
         printf("%c ", 'A' +k);
     }
-    printf("%c ", 'A' + k);
+    printf("%c |", 'A' + k);
     printf("\033[0m\n");
-    printf( " %.3d %c", 1, 124);
+    printf( " %.3d |", 1);
     printf("\n");
-
+    
     for(k=0; k<n; k++){ 
-        printf(" %.3d %c", k+2, 124);
+        printf(" %.3d |", k+2);
         for( i = 0; i < m; i++) {
             printf("%c ", table[k][i]);
         }
