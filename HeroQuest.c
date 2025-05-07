@@ -112,12 +112,36 @@ int mmenu()
 	return choice;
 }
 void help(){
-	system("clear");
-	printf("\n\t\t\033[1mNSTRUCTIONS\033[0m\n\n");
-	printf("\033[4mHow to play:\033[0m \n\n");
-	printf("\033[3;92mHeroQuest\033[0m is a game of dungeons with monsters that you have to slay\n");
-	printf("You select with which heros you want to play (or all of them) and\n");
-	printf("fight the spawns of \033[95mZARGON\033[0m to advance into the next dungeon.\n\n");
+	printf("\n\t\t\033[1mINSTRUCTIONS\033[0m\n\n");
+    printf("\033[4mHow to play:\033[0m \n\n");
+    printf("\033[3;92mHeroQuest\033[0m is a game of dungeons with monsters that you have to slay\n");
+    printf("You select with which heros you want to play (or all of them) and\n");
+    printf("fight the spawns of \033[1;95mZARGON\033[0m to advance into the next dungeon.\n\n");
+    
+    printf("\033[4mCommands:\033[0m\n\n");
+    
+    printf("\033[3;92m• Hero Movement:\033[0m\n");
+    printf("  Format: \033[95m[B|D|E|W]>[U|D|L|R][Steps]...\033[0m\n");
+    printf("  Example: \033[95mB>L3U2\033[0m - Barbarian moves 3 left, then 2 up\n");
+    printf("  Heroes have different movement steps: Barbarian (8), Dwarf (6), Elf (8), Wizard (4)\n\n");
+    
+
+    printf("\033[3;92m• Hero Attack:\033[0m\n");
+    printf("  Format: \033[95m[B|D|E|W]>A*[CellCoords]\033[0m\n");
+    printf("  Example: \033[95mD>A*E2\033[0m - Dwarf attacks monster at position E2\n");
+    printf("  \033[90m- Barbarian: Can attack adjacent enemies (orthogonal)\033[0m\n");
+    printf("  \033[90m- Dwarf: Can attack adjacent enemies (orthogonal + diagonal)\033[0m\n");
+    printf("  \033[90m- Elf: Can attack non-adjacent enemies in same row/column (if line of sight)\033[0m\n");
+    printf("  \033[90m- Wizard: Can attack any enemy in same row/column (ignoring obstacles)\033[0m\n\n");
+
+    printf("\033[3;92m• Other Commands:\033[0m\n");
+    printf("  \033[95mX\033[0m - End youre turn (monsters will move)\n");
+    printf("  \033[95mQ\033[0m - Quit game\n\n");
+    
+    printf("\033[4mTips:\033[0m\n");
+    printf("• Each hero can move once and attack once per turn, in any order\n");
+    printf("• Use your heroes' special abilities strategically\n");
+    printf("• Monsters will try to reach and attack your heroes during their turn\n");
 }
 
 int play(int dif, int herolist[], int **table, int m, int n, int monsters_pos){

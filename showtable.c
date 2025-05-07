@@ -4,12 +4,15 @@
 #include <ctype.h>
 #include <string.h>
 
-void move(int **table, int **move, int pos_i, int pos_j, int des_i, int des_j);
-void pathfinder(int **table, int **move, int pos_i, int pos_j, int des_i, int des_j);
+void move(int **table, int **move, int pos_i, int pos_j, int **heroOnRoomPos);
+int pathfinder(int **table, int pos_i, int pos_j, int flag, int dest_i, int dest_j);
+
+#define n 92
+#define level 8
 
 int main(void) {
     int **table;
-    int n = 42, m = 17, i, j, level = 3, ishashtag = 0, herolist[4] = {'B', 0, 0, 0}, luckn, luckm, dif = 2, monster_max=0, mcount;
+    int m = 17, i, j, ishashtag = 0, herolist[4] = {'B', 0, 0, 0}, luckn, luckm, dif = 2, monster_max=0, mcount;
     int hcount=0, health, move[11][2];
     srand(time(NULL));
     table = (int**) malloc(n * sizeof(int*));
@@ -238,23 +241,87 @@ int main(void) {
     return 0;
 }
 
-void move(int **table, int **move, int pos_i, int pos_j, int **heroOnRoomPos) {
+void play(){
+    
+}
+
+int move(int **table, int **move, int pos_i, int pos_j, int **heroOnRoomPos) {
     int i, j, min, temp;
     int heroOnRoom = 0;
-    
-    // Finds a hero on the left room and saves the position
-    for (i=0; i<9; i++){
-        for (j=0; j<5; j++){
-            if (table[k+i][j+1] >= 'A' && table[k+i][j+1] <= 'Z') {
-                heroOnRoomPos[heroOnRoom][i] = i+k;
-                heroOnRoomPos[heroOnRoom][j] = j+1;
-                heroOnRoom++;
-                break;
+    int k=((pos_i-11)/10)+1; // Room number
+    int upperWall = 11 +((k-1)*10);
+    int whichRoom=0;
+    int checking_i=3;
+    int checking_j=3;
+    int attack =0;
+    // Finds a hero 
+    // on the left room and saves the position
+
+    if(pos_j >= 1 && pos_j <= 5){ // left room
+        whichRoom = 1;
+    }
+    else if(pos_j >= 7 && pos_j <= 9) { // mid room
+        whichRoom = 2;
+    }
+    else if(pos_j>=11 && pos_j<=15){ // right room
+        whichRoom = 3;
+    }
+    else if(pos_i <= 6){ // spawn room
+        whichRoom = 4;
+    }
+    else{ //debuging room
+        printf("\e[1;95m We got a problem! Room wasn't detected. \e[0;0m");    
+        return 0;
+    }
+    if(whichRoom == 1){ // left room
+        for (i=0; i<9; i++){
+            for (j=0; j<5; j++){
+                if (table[upperWall+1+i][j+1] >= 'A' && table[upperWall+1+i][j+1] <= 'Z') {
+                    heroOnRoomPos[heroOnRoom][i] = i+upperWall+1;
+                    heroOnRoomPos[heroOnRoom][j] = j+1;
+                    heroOnRoom++;
+                    break;
+                }
             }
         }
     }
-
-    if (heroOnRoom) {
+    else if(whichRoom == 2){ // mid room
+        for (i=0; i<n-8; i++){
+            for (j=0; j<3; j++){
+                if (table[7+i][j+7] >= 'A' && table[7+i][j+7] <= 'Z') {
+                    heroOnRoomPos[heroOnRoom][i] = i+7;
+                    heroOnRoomPos[heroOnRoom][j] = j+7;
+                    heroOnRoom++;
+                    break;
+                }
+            }
+        }
+    }
+    else if(whichRoom == 3){ // right room
+        for (i=0; i<9; i++){
+            for (j=0; j<5; j++){
+                if (table[upperWall+1+i][j+11] >= 'A' && table[upperWall+1+i][j+11] <= 'Z') {
+                    heroOnRoomPos[heroOnRoom][i] = i+upperWall+1;
+                    heroOnRoomPos[heroOnRoom][j] = j+11;
+                    heroOnRoom++;
+                    break;
+                }
+            }
+        }
+    }
+    else if(whichRoom == 4){  // spawn room
+        for (i=0; i<6; i++){
+            for (j=0; j<9; j++){
+                if (table[1+i][j+4] >= 'A' && table[1+i][j+4] <= 'Z') {
+                    heroOnRoomPos[heroOnRoom][i] = i+1;
+                    heroOnRoomPos[heroOnRoom][j] = j+4;
+                    heroOnRoom++;
+                    break;
+                }
+            }
+        }
+    }
+    if (heroOnRoom) { 
         min = (heroOnRoomPos[0][0] + heroOnRoomPos[0][1]) - (pos_i + pos_j); // Arxikopoiei to min
     }
 
@@ -267,81 +334,148 @@ void move(int **table, int **move, int pos_i, int pos_j, int **heroOnRoomPos) {
             }
         }
     }
-    // Finds a hero on the right room and saves the position
-    for (i=0; i<9; i++){
-        for (j=0; j<5; j++){
-            if (table[k+i][j+11] >= 'A' && table[k+i][j+1] <= 'Z') {
-                heroOnRoomPos[heroOnRoom][i] = i+k;
-                heroOnRoomPos[heroOnRoom][j] = j+1;
-                heroOnRoom++;
-                break;
+    if(heroOnRoom){
+        int count1 =1;
+        int count2 =0;
+        int MoveCountI = 0;
+        int MoveCountJ = 0;
+        int step =0;
+        while(step<10){ // should add a check for error code
+            while(step < 10 && (checking_i != -1 || checking_i != 0) && checking_i!= -2){
+                if(pathfinder(table, move[count2][0], move[count2][1], 1, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == -1){
+                    if(checking_j == -1){
+                        MoveCountJ++;
+                        move[count1][0] = pos_i + MoveCountI;
+                        move[count1][1] = pos_j + MoveCountJ;
+                        step++;
+                        count2=count1;
+                        count1++;
+                        checking_j = 5;
+                        continue;
+                    }
+                    checking_i = -1; // Blocked
+                    continue;
+                }
+                else if(pathfinder(table, move[count2][0], move[count2][1], 1, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == -2){
+                    checking_i = -2; // Error
+                    checking_j = -2; // Error
+                    continue;
+                }
+                else if(pathfinder(table, move[count2][0], move[count2][1], 1, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == 0){
+                    checking_i = 0; // No movement needed
+                    continue;
+                }
+                else if(pathfinder(table, move[count2][0], move[count2][1], 1, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == 1){
+                    MoveCountI++;
+                    move[count1][0] = pos_i + MoveCountI;
+                    move[count1][1] = pos_j + MoveCountJ;
+                    step++;
+                    count2=count1;
+                    count1++;
+                }
+                else if(pathfinder(table, move[count2][0], move[count2][1], 1, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == 2){
+                    MoveCountI--;
+                    move[count1][0] = pos_i + MoveCountI;
+                    move[count1][1] = pos_j + MoveCountJ;
+                    step++;
+                    count2=count1;
+                    count1++;
+                }
+            }
+            while(step < 10 && (checking_j != -1 || checking_j != 0) && checking_j!= -2){
+                if(pathfinder(table, move[count2][0], move[count2][1], 0, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == -1){
+                    if(checking_i == -1){
+                        MoveCountJ++;
+                        move[count1][0] = pos_i + MoveCountI;
+                        move[count1][1] = pos_j + MoveCountJ;
+                        step++;
+                        count2=count1;
+                        count1++;
+                        checking_i = 0;
+                        continue;
+                    }
+                    checking_j = -1; // Blocked
+                    continue;
+                }
+                else if(pathfinder(table, move[count2][0], move[count2][1], 0, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == -2){
+                    checking_i = -2; // Error
+                    checking_j = -2; // Error
+                    continue;
+                }
+                else if(pathfinder(table, move[count2][0], move[count2][1], 0, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == 0){
+                    checking_j = 0; // No movement needed
+                    continue;
+                }
+                else if(pathfinder(table, move[count2][0], move[count2][1], 0, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == 1){
+                    MoveCountJ++;
+                    move[count1][0] = pos_i + MoveCountI;
+                    move[count1][1] = pos_j + MoveCountJ;
+                    step++;
+                    count2=count1;
+                    count1++;
+                }
+                else if(pathfinder(table, move[count2][0], move[count2][1], 0, heroOnRoomPos[i][0], heroOnRoomPos[i][1]) == 2){
+                    MoveCountJ--;
+                    move[count1][0] = pos_i + MoveCountI;
+                    move[count1][1] = pos_j + MoveCountJ;
+                    step++;
+                    count2=count1;
+                    count1++;
+                }
+            }
+            if(checking_i == -2 || checking_j == -2)
+            {
+                printf("there was a problem in pathfinder\n");
+                return 0;
+            }
+            else if(checking_i ==0 && checking_j == 0){
+                return 1;
+            }
+            else{
+                return 0;
             }
         }
     }
-
-    if (heroOnRoom) {
-        min = (heroOnRoomPos[0][0] + heroOnRoomPos[0][1]) - (pos_i + pos_j);
-    }
-    if(heroOnRoom >1){
-        for (i=1; i<heroOnRoom; i++){
-            temp = (heroOnRoomPos[i][0] + heroOnRoomPos[i][1]) - (pos_i + pos_j);
-            if (temp < min){
-                min = temp;
-                i--;
-            }
-        }
-    }
-
 }    
 
-void pathfinder(int **table, int **move, int pos_i, int pos_j, int des_i, int des_j){
-    int flag=0, i, j, step, flag1=0, flag2=0;
-    move[0][0] = pos_i;
-    move[0][1] = pos_j;
-    while(!flag){
-        while(step<10 && !flag1){
-            if(pos_i > des_i){
-                if(table[pos_i-1][pos_j] <= 'Z' && table[pos_i-1][pos_j] >= '0' && table[pos_i][pos_j-1] == '#'){
-                    break;
+int pathfinder(int **table, int pos_i, int pos_j, int flag, int dest_i, int dest_j){
+    
+    if (flag){
+        if (pos_i < dest_i){
+            if ((table[pos_i + 1][pos_j] >= '1' && table[pos_i + 1][pos_j] <= 'Z' ) || table[pos_i + 1][pos_j] == '#') {
+                return -1; // Blocked
+            } else {
+                return 1; // Move down
+            }
+        } else if (pos_i > dest_i){
+            if ((table[pos_i - 1][pos_j] >= '1' && table[pos_i - 1][pos_j] <= 'Z' ) || table[pos_i - 1][pos_j] == '#') {
+                else{
+                    return -1; // Blocked
                 }
-                step++;
-                pos_i--;
-                move[step][0] = pos_i;
+            } else {
+                return 2; // Move up
             }
-            else if(pos_i < des_i){
-                if(table[pos_i+1][pos_j] <= 'Z' && table[pos_i+1][pos_j] >= '0' && table[pos_i][pos_j-1] == '#'){
-                    break;
-                }
-                step++;
-                pos_i++;
-                move[step][0] = pos_i;
-            }
-            else{
-                flag1=1;
-                break;
-            }
+
+        } else {
+            return 0; // No movement needed
         }
-        while(step<10 && !flag2){
-            if(pos_i > des_i){
-                if(table[pos_i][pos_j-1] <= 'Z' && table[pos_i][pos_j-1] >= '0' && table[pos_i][pos_j-1] == '#'){
-                    break;
-                }
-                step++;
-                pos_j--;
-                move[step][1] = pos_j;
+    } else {
+        if (pos_j < dest_j){
+            if ((table[pos_i][pos_j + 1] >= '1' && table[pos_i][pos_j + 1] <= 'Z' ) || table[pos_i][pos_j + 1] == '#') {
+                return -1; // Blocked
+            } else {
+                return 1; // Move right
             }
-            else if(pos_i < des_i){
-                if(table[pos_i][pos_j+1] <= 'Z' && table[pos_i][pos_j+1] >= '0' && table[pos_i][pos_j-1] == '#'){
-                    break;
-                }
-                step++;
-                pos_j++;
-                move[step][1] = pos_j;
+        } else if (pos_j > dest_j){
+            if ((table[pos_i][pos_j - 1] >= '1' && table[pos_i][pos_j - 1] <= 'Z' ) || table[pos_i][pos_j - 1] == '#') {
+                return -1; // Blocked
+            } else {
+                return 2; // Move left
             }
-            else{
-                flag2=1;
-                break;
-            }
+        } else {
+            return 0; // No movement needed
         }
     }
+    printf("\e[1;95m We got a problem! Pathfinding failed. \e[0;0m");
+    return -2; // Error case
 }
