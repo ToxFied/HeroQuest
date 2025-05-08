@@ -28,6 +28,10 @@ int main() {
     printf("\t\t║         \033[1;37mThe ultimate adventure awaits in the ancient depths...\033[0m       ║\n");
     printf("\t\t╚══════════════════════════════════════════════════════════════════════╝\n");
     printf("\n");
+
+    printf("\n\n\t\033[1;33mForging the dungeon walls:\033[0m\n\t");
+    
+    printf("\n\n\t\033[1;32mDungeon ready!\033[0m\n\n");
     
     printf("\t\t\t\t   \033[1;37m╔═══ MAIN MENU ═══╗\033[0m\n\n");
     printf("\t\t\t\t     \033[1mNew Game \033[1;32m[1]\033[0m\n");
