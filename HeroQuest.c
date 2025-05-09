@@ -206,7 +206,7 @@ void help(){
 
 
 int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHero){
-	int i, j, k, x=17, lose=1, wincount=0, moveLength1=0, moveLength2=0, steps=1, enoughMoves=1, minicount=1, direction = 0;
+	int i, j, k, x=17, lose=1, wincount=0, final_i, attacks=0, final_j, temp_i, temp_j, moveLength1=0, doubleDigit=0, continueFlag=0, moveLength2=0, flag=0, steps=1, enoughMoves=1, minicount=1, directions = 0, movingPiece=0, piece_i=0, piece_j=0, correctMove=1;
 	char move[20] = {0};
 	maketable(table, y, dif, herolist, 0, hcount);
 	while(lose){ //flag if player loses, game ends
@@ -215,7 +215,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 		for(k=0; k<hcount; k++){
 			enoughMoves = 1;
 			while(steps>0 && enoughMoves){ //ean ta vimata tou iroa teliosoun h den thelei na hrisimopoihsi alla
-				showtable(table, y);
+				showtable(table, *y);
 				printf("\033[4mHealth:\033[0m\n");
 				for(i=0; i<hcount; i++){
 					printf("%c:%d ", herolist[i], healthHero[i]);
@@ -232,93 +232,384 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 					continue;
 				}
 				//ELENHEI TA PANTA
-				while(1){ //elenhos gia sosti kinisi
-					if(move[0] != 'b' || move[0] != 'B' ||move[0] != 'w' ||move[0] != 'W' || move[0] != 'e' || move[0] != 'E' || move[0] != 'd' || move[0] != 'D'){
-						printf("That move is invalid. Please type again:\n");
-						fgets(move, 20, stdin);
-					}
-					else if(move[1] != '>'){
-						printf("That move is invalid. Please type again:\n");
-						fgets(move, 20, stdin);
-					}
-					else if(move[2] != 'u' || move[2] != 'U' ||move[2] != 'd' ||move[2] != 'D' || move[2] != 'l' || move[2] != 'L' || move[2] != 'r' || move[2] != 'R' || move[2] != 'a' || move[2] != 'A'){
-						printf("That move is invalid. Please type again:\n");
-						fgets(move, 20, stdin);
-					}
-					else if((move[2] != 'a' || move[2] != 'A') && move[3] != '*'){
-						printf("That move is invalid. Please type again:\n");
-						fgets(move, 20, stdin);
-					}
-					else if(move[3] != '*' && (move[4] != 'u' || move[4] != 'U' ||move[4] != 'd' ||move[4] != 'D' || move[4] != 'l' || move[4] != 'L' || move[4] != 'r' || move[4] != 'R')){
-						printf("That move is invalid. Please type again:\n");
-						fgets(move, 20, stdin);
-					}
-					else{
-						break;
-					}
-				}
-				while(1){ //elenhos ean o iroas pou epelexe uparhei
-					int existCheck=0;
-					for(j=0; j<hcount; j++){
-						if(herolist[j] == move[0]){
-							existCheck=1;
+				correctMove = 1;
+				while(correctMove){
+					continueFlag=0;
+					while(1){ //elenhos gia sosti kinisi
+						if(move[0] != 'b' || move[0] != 'B' ||move[0] != 'w' ||move[0] != 'W' || move[0] != 'e' || move[0] != 'E' || move[0] != 'd' || move[0] != 'D'){
+							continueFlag =1;
+						}
+						else if(move[1] != '>'){
+							continueFlag =1;
+						}
+						else if(move[2] != 'u' || move[2] != 'U' ||move[2] != 'd' ||move[2] != 'D' || move[2] != 'l' || move[2] != 'L' || move[2] != 'r' || move[2] != 'R' || move[2] != 'a' || move[2] != 'A'){
+							continueFlag =1;
+						}
+						else if((move[2] != 'a' || move[2] != 'A') && move[3] != '*'){
+							continueFlag =1;
+						}
+						else if(move[3] != '*' && (move[4] != 'u' || move[4] != 'U' ||move[4] != 'd' ||move[4] != 'D' || move[4] != 'l' || move[4] != 'L' || move[4] != 'r' || move[4] != 'R')){
+							continueFlag =1;
+						}
+						else{
 							break;
 						}
 					}
-					if(existCheck){
-						break;
+					if(continueFlag){
+						continue;
 					}
-					printf("That move is invalid. Please type again:\n");
-					fgets(move, 20, stdin);
-				}
-				if(minicount){ //only for the first time he choose
-					switch(move[0]){ //how many moves they got
-						case 'b':
-						case 'B':
-							steps =8;
-							break;
-						case 'e':
-						case 'E':
-							steps = 12;
-							break;
-						case 'd':
-						case 'D':
-							steps = 6;
-							break;
-						case 'w':
-						case 'W':
-							steps = 10;
-							break;
-					}
-				}
-				if((move[2] == 'u' || move[2] == 'U' ||move[2] == 'd' ||move[2] == 'D' || move[2] == 'l' || move[2] == 'L' || move[2] == 'r' || move[2] == 'R') && !(move[5] >= '1' && move[5] <= 'z')){ //move only to one direction
-					moveLength1 = move[3]*10+move[4];
-					if(steps<moveLength1){
-						printf("That move is invalid. Please type again:\n");
-						fgets(move, 20, stdin);
-					}
-					switch(move[2]){	//elenhos gia empodia
-						case 'u':
-						case 'U':
-							for(i=0; i<moveLength1; i++){ 
-								
+					while(1){ //elenhos ean o iroas pou epelexe uparhei
+
+						int existCheck=0;
+						for(j=0; j<hcount; j++){
+							if(herolist[j] == move[0]){
+								existCheck=1;
+								break;
 							}
+						}
+						if(existCheck){
 							break;
-						case 'd':
-						case 'D':
-							direction = 2;
+						}
+						continueFlag =1;
+					}
+					if(continueFlag){
+						continue;
+					}
+					if(minicount){ //only for the first time he choose
+						switch(move[0]){ //how many moves they got
+							case 'b':
+							case 'B':
+								for(i=0;i<6;i++){
+									for(j=0;j<9;j++){
+										if(table[i][j] == 'B'){
+											piece_i = i;
+											piece_j = j;
+										}
+									}
+								}
+								steps =8;
+								break;
+							case 'e':
+							case 'E':
+								for(i=0;i<6;i++){
+									for(j=0;j<9;j++){
+										if(table[i][j] == 'E'){
+											piece_i = i;
+											piece_j = j;
+										}
+									}
+								}
+								steps = 12;
+								break;
+							case 'd':
+							case 'D':
+								for(i=0;i<6;i++){
+									for(j=0;j<9;j++){
+										if(table[i][j] == 'D'){
+											piece_i = i;
+											piece_j = j;
+										}
+									}
+								}
+								steps = 6;
+								break;
+							case 'w':
+							case 'W':
+								for(i=0;i<6;i++){
+									for(j=0;j<9;j++){
+										if(table[i][j] == 'W'){
+											piece_i = i;
+											piece_j = j;
+										}
+									}
+								}
+								steps = 10;
+								break;
+						}
+					}
+					i=0;
+					while(1){ //elenhos metakinisis
+						flag=0;
+						doubleDigit=0;
+						directions=0;
+						if(move[i] == 0){
 							break;
-						case 'l':
-						case 'L':
-							direction = 3;
-							break;
-						case 'r':
-						case 'R':
-							direction = 4;
-							break;
-						default:
-							printf("problemmmmm\n");
-							return 0;
+						}
+						if(move[2] == 'u' || move[2] == 'U' ||move[2] == 'd' ||move[2] == 'D' || move[2] == 'l' || move[2] == 'L' || move[2] == 'r' || move[2] == 'R' || move[2] == 'a' || move[2] == 'A'){
+							if(move[2] == 'a' || move[2] == 'A'){
+								attacks = 1;
+							}
+							if(move[i+2] >=1 && move[i+2] <=9){
+								moveLength1 = move[i+1]*10+move[i+2];
+								if(move[i+3] <= 'z' && move[i+3] >= 'a' || move[i+3] <= 'Z' && move[i+3] >= 'A'){
+									directions = 1;
+								}
+								doubleDigit=1;
+							}
+							else{
+								moveLength1 = move[i+1];
+								if(move[i+2] <= 'z' && move[i+2] >= 'a' || move[i+2] <= 'Z' && move[i+2] >= 'A'){
+									directions = 1;
+								}
+							}
+							if(directions){
+								if(move[i+4] >=1 && move[i+4] <=9){
+									moveLength2 = move[i+3]*10+move[i+4];
+								}
+								else{
+									moveLength2 = move[i+3];
+								}
+								moveLength1 += moveLength2;
+							}
+							if(steps<moveLength1){
+								break;
+							}
+							switch(move[i]){	//elenhos gia empodia
+								case 'u':
+								case 'U':
+									for(j=0; j<moveLength1; j++){ 
+										if(table[piece_i-j][piece_j] >= '1' && table[piece_i-j][piece_j] <= 'Z' || table[piece_i-j][piece_j] == '#'){
+											if(j==moveLength1-1 && attacks && !directions && (table[piece_i-j][piece_j]>='1' && table[piece_i-j][piece_j]<='9')){
+												final_i = piece_i-j;
+												final_j = piece_j;
+												break;
+											}
+											flag=1;
+										}
+										else{
+											temp_i = piece_i-j;
+											temp_j = piece_j;
+											final_i = piece_i-j;
+											final_j = piece_j;
+										}
+									}
+									break;
+								case 'd':
+								case 'D':
+									for(j=0; j<moveLength1; j++){ 
+										if(table[piece_i+j][piece_j] >= '1' && table[piece_i-j][piece_j] <= 'Z' || table[piece_i-j][piece_j] == '#'){
+											if(j==moveLength1-1 && attacks && !directions && (table[piece_i+j][piece_j]>='1' && table[piece_i+j][piece_j]<='9')){
+												final_i = piece_i+j;
+												final_j = piece_j;
+												break;
+											}
+											flag=1;
+										}
+										else{
+											temp_i = piece_i+j;
+											temp_j = piece_j;
+											final_i = piece_i+j;
+											final_j = piece_j;
+										}
+									}
+									break;
+								case 'l':
+								case 'L':
+									for(j=0; j<moveLength1; j++){ 
+										if(table[piece_i][piece_j-j] >= '1' && table[piece_i][piece_j-j] <= 'Z' || table[piece_i][piece_j-j] == '#'){
+											if(j==moveLength1-1 && attacks && !directions && (table[piece_i][piece_j-j]>='1' && table[piece_i][piece_j-j]<='9')){
+												final_i = piece_i;
+												final_j = piece_j-j;
+												break;
+											}
+											flag=1;
+										}
+										else{
+											temp_j = piece_j-j;
+											temp_i = piece_i;
+											final_i = piece_i;
+											final_j = piece_j-j;
+										}
+									}
+									break;
+								case 'r':
+								case 'R':
+									for(j=0; j<moveLength1; j++){ 
+										if(table[piece_i][piece_j+j] >= '1' && table[piece_i][piece_j+j] <= 'Z' || table[piece_i][piece_j+j] == '#'){
+											if(j==moveLength1-1 && attacks && !directions && (table[piece_i][piece_j+j]>='1' && table[piece_i][piece_j+j]<='9')){
+												final_i = piece_i;
+												final_j = piece_j+j;
+												break;
+											}
+											flag=1;
+										}
+										else{
+											temp_j = piece_j+j;
+											temp_i = piece_i;
+											final_i = piece_i;
+											final_j = piece_j+j;
+										}
+									}
+									break;
+								default:
+									printf("problemmmmm\n");
+									return 0;
+							}
+							if(directions){
+								if(doubleDigit){
+									switch(move[i+3]){	//elenhos gia empodia
+										case 'u':
+										case 'U':
+											for(j=0; j<moveLength1; j++){ 
+												if(table[temp_i-j][temp_j] >= '1' && table[temp_i-j][piece_j] <= 'Z' || table[temp_i-j][temp_j] == '#'){
+													if(j==moveLength1-1 && attacks && (table[piece_i-j][piece_j]>='1' && table[piece_i-j][piece_j]<='9')){
+														final_i = piece_i-j;
+														final_j = piece_j;
+														break;
+													}
+													flag=1;
+												}
+												else{
+													final_i = piece_i-j;
+													final_j = piece_j;
+												}
+											}
+											break;
+										case 'd':
+										case 'D':
+											for(j=0; j<moveLength1; j++){ 
+												if(table[temp_i+j][temp_j] >= '1' && table[temp_i-j][temp_j] <= 'Z' || table[temp_i-j][temp_j] == '#'){
+													if(j==moveLength1-1 && attacks && (table[piece_i+j][piece_j]>='1' && table[piece_i+j][piece_j]<='9')){
+														final_i = piece_i+j;
+														final_j = piece_j;
+														break;
+													}
+													flag=1;
+												}
+												else{
+													final_i = piece_i+j;
+													final_j = piece_j;
+												}
+											}
+											break;
+										case 'l':
+										case 'L':
+											for(j=0; j<moveLength1; j++){ 
+												if(table[temp_i][temp_j-j] >= '1' && table[temp_i][temp_j-j] <= 'Z' || table[temp_i][temp_j-j] == '#'){
+													if(j==moveLength1-1 && attacks && (table[piece_i][piece_j-j]>='1' && table[piece_i][piece_j-j]<='9')){
+														final_i = piece_i;
+														final_j = piece_j-j;
+														break;
+													}
+													flag=1;
+												}
+												else{
+													final_i = piece_i;
+													final_j = piece_j-j;
+												}
+											}
+											break;
+										case 'r':
+										case 'R':
+											for(j=0; j<moveLength1; j++){ 
+												if(table[temp_i][temp_j+j] >= '1' && table[temp_i][temp_j+j] <= 'Z' || table[temp_i][temp_j+j] == '#'){
+													if(j==moveLength1-1 && attacks && (table[piece_i][piece_j+j]>='1' && table[piece_i][piece_j+j]<='9')){
+														final_i = piece_i;
+														final_j = piece_j+j;
+														break;
+													}
+													flag=1;
+												}
+												else{
+													final_i = piece_i;
+													final_j = piece_j+j;
+												}
+											}
+											break;
+										default:
+											printf("problemmmmm\n");
+											return 0;
+									}
+								}
+								else{
+									switch(move[i+2]){	//elenhos gia empodia
+										case 'u':
+										case 'U':
+											for(j=0; j<moveLength1; j++){ 
+												if(table[temp_i-j][temp_j] >= '1' && table[temp_i-j][piece_j] <= 'Z' || table[temp_i-j][temp_j] == '#'){
+													if(j==moveLength1-1 && attacks && (table[piece_i-j][piece_j]>='1' && table[piece_i-j][piece_j]<='9')){
+														final_i = piece_i-j;
+														final_j = piece_j;
+														break;
+													}
+													flag=1;
+												}
+												else{
+													final_i = piece_i-j;
+													final_j = piece_j;
+												}
+											}
+											break;
+										case 'd':
+										case 'D':
+											for(j=0; j<moveLength1; j++){ 
+												if(table[temp_i+j][temp_j] >= '1' && table[temp_i-j][temp_j] <= 'Z' || table[temp_i-j][temp_j] == '#'){
+													if(j==moveLength1-1 && attacks && (table[piece_i+j][piece_j]>='1' && table[piece_i+j][piece_j]<='9')){
+														final_i = piece_i+j;
+														final_j = piece_j;
+														break;
+													}
+													flag=1;
+												}
+												else{
+													final_i = piece_i+j;
+													final_j = piece_j;
+												}
+											}
+											break;
+										case 'l':
+										case 'L':
+											for(j=0; j<moveLength1; j++){ 
+												if(table[temp_i][temp_j-j] >= '1' && table[temp_i][temp_j-j] <= 'Z' || table[temp_i][temp_j-j] == '#'){
+													if(j==moveLength1-1 && attacks && (table[piece_i][piece_j-j]>='1' && table[piece_i][piece_j-j]<='9')){
+														final_i = piece_i;
+														final_j = piece_j-j;
+														break;
+													}
+													flag=1;
+												}
+												else{
+													final_i = piece_i;
+													final_j = piece_j-j;
+												}
+											}
+											break;
+										case 'r':
+										case 'R':
+											for(j=0; j<moveLength1; j++){ 
+												if(table[temp_i][temp_j+j] >= '1' && table[temp_i][temp_j+j] <= 'Z' || table[temp_i][temp_j+j] == '#'){
+													if(j==moveLength1-1 && attacks && (table[piece_i][piece_j+j]>='1' && table[piece_i][piece_j+j]<='9')){
+														final_i = piece_i;
+														final_j = piece_j+j;
+														break;
+													}
+													flag=1;
+												}
+												else{
+													final_i = piece_i;
+													final_j = piece_j+j;
+												}
+											}
+											break;
+										default:
+											printf("problemmmmm\n");
+											return 0;
+									}
+								}
+							}
+							i++;
+							if(flag){
+								continueFlag =1;
+								break;
+							}
+						}
+						
+					}
+					if(continueFlag){
+						continue;
+					}
+					else{
+						correctMove = 0;
 					}
 				}
 			}
@@ -390,13 +681,12 @@ void maketable(int **table, int *n, int dif, int *herolist, int flag, int hcount
 			printf("Reallocation failed.");
 		}
 
-		for (i = tempn; i<*n; i++)(
+		for (i = tempn; i<*n; i++){
 			table[i]=(int *)malloc(m * sizeof(int));
 			if (table[i] == NULL){
 				printf("Allocation failed.");
 			}
-	
-		)
+		}
 	}
 	int level = ((*n=11)/10)+1; //hero count
 	// build standard room
