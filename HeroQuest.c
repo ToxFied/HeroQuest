@@ -18,7 +18,7 @@ int main(void){
 	*y = 22; // y = lines of the table
 	x = 17; // x = rows of the table
 	
-	table = (int **)malloc(n * sizeof(int *)); // allocate memory for the dynamic 2D array
+	table = (int **)malloc(n *sizeof(int *));
 	if (table == NULL) {
 		printf("Memory allocation failed\n");
 		free(table);
@@ -37,7 +37,7 @@ int main(void){
 			return 1;
 		}
 		for (j = 0; j < x; j++) { // set all stuff to 0
-			table[i][j] = 0;//nigga you here?/???
+			table[i][j] = 0;
 		}
 	}
 	
@@ -72,16 +72,16 @@ int main(void){
 				for(i=0; i<heros; i++){
 					switch(herolist[i]){
 						case 'B':
-							healthHero[i] = 8;
+							healthHero[i] = 8; //Barbarian
 							break;
 						case 'D':
-							healthHero[i] = 7;
+							healthHero[i] = 7; //Dwarf
 							break;
 						case 'E':
-							healthHero[i] = 6;
+							healthHero[i] = 6; //Elf
 							break;
 						case 'W':
-							healthHero[i] = 4;
+							healthHero[i] = 4; //Wizard
 							break;
 						default:
 							printf("Problem!");
@@ -231,7 +231,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 					enoughMoves = 0;
 					continue;
 				}
-				//ELENHEI TA PANTA
+				//ELENHEI TA PANTA mhn fwnazeis kale
 				correctMove = 1;
 				while(correctMove){
 					continueFlag=0;
@@ -258,7 +258,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 					if(continueFlag){
 						continue;
 					}
-					while(1){ //elenhos ean o iroas pou epelexe uparhei
+					while(1){ //elenxos ean o iroas pou epelekse yparxei
 
 						int existCheck=0;
 						for(j=0; j<hcount; j++){
@@ -328,7 +328,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 						}
 					}
 					i=0;
-					while(1){ //elenhos metakinisis
+					while(1){ //elenxos metakinisis
 						flag=0;
 						doubleDigit=0;
 						directions=0;
@@ -672,10 +672,10 @@ void settings(int *pdif, int *pheros){
 void maketable(int **table, int *n, int dif, int *herolist, int flag, int hcount){
 	int i, j, k=0, m=17, ishashtag, luckm =0, luckn=0, mcount=0, hcount=0, monster_max=0, health=0;
 	if (flag){
-		//kane realloc edw
+		//kane realloc edw. EDIT: Den kserw an doulevei swsta. test it
 		int tempn = *n;
 
-		table = (int **)realloc(*table, (*n) *sizeof(int *));
+		table = (int **)realloc(table, (*n) *sizeof(int *));
 
 		if (table == NULL){
 			printf("Reallocation failed.");
@@ -685,6 +685,9 @@ void maketable(int **table, int *n, int dif, int *herolist, int flag, int hcount
 			table[i]=(int *)malloc(m * sizeof(int));
 			if (table[i] == NULL){
 				printf("Allocation failed.");
+			}
+			for (j = 0; j <m; j++) {
+				table[i][j] = ' ';
 			}
 		}
 	}
@@ -859,7 +862,7 @@ void maketable(int **table, int *n, int dif, int *herolist, int flag, int hcount
                     continue;
             }
             else{
-                health = 3*dif-rand()%3;
+                health = 3*dif -rand()%3;
                 table[k+luckn][luckm] = health + '0';
             }
         }
