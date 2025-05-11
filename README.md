@@ -45,9 +45,25 @@ Each contributed to the coding, design, and testing phases of the project, ensur
 
 ---
 
-Feel free to explore, compile, and play the game! For any questions or feedback, please contact the development team.
 
 Good luck and have fun!
 
 
-![ChatGPT Image Apr 9, 2025, 01_10_13 AM](https://github.com/user-attachments/assets/7f058792-bdd2-45f6-955f-a053f9f4cb85)
+![lol](https://github.com/user-attachments/assets/7f058792-bdd2-45f6-955f-a053f9f4cb85)
+
+
+
+
+
+[![In the End - Linkin Park](https://img.youtube.com/vi/eVTXPUF4Oz4/0.jpg)](https://www.youtube.com/watch?v=eVTXPUF4Oz4)
+
+*I tried so hard*  
+*And got so far*  
+*But in the end*  
+*It doesn't even matter*  
+*I had to fall*  
+*To lose it all*  
+*But in the end*  
+*It doesn't even matter*
+
+
