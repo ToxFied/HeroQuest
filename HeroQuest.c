@@ -206,10 +206,10 @@ void help(){
 
 
 int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHero){
-	int i, j, k, x=17, lose=1, wincount=0, final_i, attacks=0, final_j, temp_i, temp_j, moveLength1=0, currentHero=0, attacking=0, MoveStrLength=0, moving=0, temp=0, countFlag=0;
-	int doubleDigit=0, continueFlag=0, moveLength2=0, flag=0, steps=1, enoughMoves=1, minicount=1, direction1 = 0, movingPiece=0, piece_i=0, piece_j=0, correctMove=1, checked =0;
-	int totallength=0, flagforl2=0, flagforl1 =0, direction2=0, new_piece_i=0, new_piece_j=0, final_piece_i=0, final_piece_j=0; //min anisihis gia tis metavlites polles apo autes den hrisimopiounte kai tha poun bye bye later
-	char move[20] = {0};
+	int i, j, k, x=17, lose=1, wincount=0, animationSteps[13][2] = {0}, moveLength1=0, currentHero=0, attacking=0, MoveStrLength=0, moving=0, temp=0, countFlag=0;
+	int continueFlag=0, moveLength2=0, flag=0, steps=1, enoughMoves=1, minicount=1, direction1 = 0, movingPiece=0, piece_i=0, piece_j=0, correctMove=1, checked =0;
+	int totallength=0, flagforl2=0, flagforl1 =0, direction2=0, new_piece_i=0, new_piece_j=0, final_piece_i=0, final_piece_j=0, animationStepsLength=0;
+	char move[13] = {0};
 	maketable(table, y, dif, herolist, 0, hcount);
 	while(lose){ //flag if player loses, game ends
 		wincount++; //posa stages nikise
@@ -415,6 +415,10 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 									continueFlag = 1;
 									break;
 								}
+								if(attacking && i == moveLength1 && table[new_piece_i-i][new_piece_j] <= '1' || table[new_piece_i-i][new_piece_j] >= '9'){
+									continueFlag =1;
+									break;
+								}
 								new_piece_i = piece_i - i;
 								new_piece_j = piece_j;
 								final_piece_i = new_piece_i - i;
@@ -433,6 +437,10 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 								}
 								else if(i != moveLength1-1 && attacking && (table[piece_i+i][piece_j] >= '1' && table[piece_i+i][piece_j] <= '9')){
 									continueFlag = 1;
+									break;
+								}
+								if(attacking && i == moveLength1 && table[new_piece_i+i][new_piece_j] <= '1' || table[new_piece_i+i][new_piece_j] >= '9'){
+									continueFlag =1;
 									break;
 								}
 								new_piece_i = piece_i + i;
@@ -455,6 +463,10 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 									continueFlag = 1;
 									break;
 								}
+								if(attacking && i == moveLength1 && table[new_piece_i][new_piece_j-i] <= '1' || table[new_piece_i][new_piece_j-i] >= '9'){
+									continueFlag =1;
+									break;
+								}
 								new_piece_i = piece_i;
 								new_piece_j = piece_j - i;
 								final_piece_i = new_piece_i;
@@ -473,6 +485,10 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 								}
 								else if(i != moveLength1-1 && attacking && (table[piece_i][piece_j+i] >= '1' && table[piece_i][piece_j+i] <= '9')){
 									continueFlag = 1;
+									break;
+								}
+								if(attacking && i == moveLength1 && table[new_piece_i][new_piece_j+i] <= '1' || table[new_piece_i][new_piece_j+i] >= '9'){
+									continueFlag =1;
 									break;
 								}
 								new_piece_i = piece_i;
@@ -506,7 +522,11 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 										continueFlag = 1;
 										break;
 									}
-									else if(i != moveLength1-1 && attacking && table[new_piece_i-i][new_piece_j] >= '1' && table[new_piece_i-i][new_piece_j] <= '9'){
+									else if(i != moveLength2-1 && attacking && table[new_piece_i-i][new_piece_j] >= '1' && table[new_piece_i-i][new_piece_j] <= '9'){
+										continueFlag = 1;
+										break;
+									}
+									else if(attacking && i == moveLength2 && table[new_piece_i-i][new_piece_j] <= '1' || table[new_piece_i-i][new_piece_j] >= '9'){
 										continueFlag = 1;
 										break;
 									}
@@ -524,7 +544,11 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 										continueFlag = 1;
 										break;
 									}
-									else if(i != moveLength1-1 && attacking && (table[new_piece_i+i][new_piece_j] >= '1' && table[new_piece_i+i][new_piece_j] <= '9')){
+									else if(i != moveLength2-1 && attacking && (table[new_piece_i+i][new_piece_j] >= '1' && table[new_piece_i+i][new_piece_j] <= '9')){
+										continueFlag = 1;
+										break;
+									}
+									else if(attacking && i == moveLength2 && table[new_piece_i+i][new_piece_j] <= '1' || table[new_piece_i+i][new_piece_j] >= '9'){
 										continueFlag = 1;
 										break;
 									}
@@ -542,7 +566,11 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 										continueFlag = 1;
 										break;
 									}
-									else if(i != moveLength1-1 && attacking && (table[new_piece_i][new_piece_j-i] >= '1' && table[new_piece_i][new_piece_j-i] <= '9')){
+									else if(i != moveLength2-1 && attacking && (table[new_piece_i][new_piece_j-i] >= '1' && table[new_piece_i][new_piece_j-i] <= '9')){
+										continueFlag = 1;
+										break;
+									}
+									else if(attacking && i == moveLength2 && table[new_piece_i][new_piece_j-i] <= '1' || table[new_piece_i][new_piece_j-i] >= '9'){
 										continueFlag = 1;
 										break;
 									}
@@ -564,6 +592,10 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 										continueFlag = 1;
 										break;
 									}
+									else if(attacking && i == moveLength2 && table[new_piece_i][new_piece_j+i] <= '1' || table[new_piece_i][new_piece_j+i] >= '9'){
+										continueFlag = 1;
+										break;
+									}
 									final_piece_i = new_piece_i;
 									final_piece_j = new_piece_j + i;
 									break;
@@ -579,7 +611,86 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 					if(continueFlag){
 						continue;
 					}
-					
+					//250+ lines worth of checks
+					steps-=totallength;
+				}
+				if(!enoughMoves){
+					continue;
+				}
+				for(i=0;i<moveLength1;i++){
+					switch(direction1){
+						case 'u':
+						case 'U':
+							animationSteps[i][0] = piece_i-i;
+							animationSteps[i][1] = piece_i;
+						break;
+						case 'd':
+						case 'D':
+							animationSteps[i][0] = piece_i+i;
+							animationSteps[i][1] = piece_i;
+							break;
+						case 'l':
+						case 'L':
+							animationSteps[i][0] = piece_i;
+							animationSteps[i][1] = piece_i-i;
+							break;
+						case 'r':
+						case 'R':
+							animationSteps[i][0] = piece_i;
+							animationSteps[i][1] = piece_i+i;
+							break;
+					}
+				}
+				if(checked){//if sec direction exist
+					for(j=i;j<moveLength2+i;j++){// animation table fill
+						switch(direction1){
+							case 'u':
+							case 'U':
+								animationSteps[j][0] = animationSteps[j-1][0]-1;
+								animationSteps[j][1] = animationSteps[j-1][1];
+							break;
+							case 'd':
+							case 'D':
+								animationSteps[i][0] = animationSteps[j-1][0]+1;
+								animationSteps[i][1] = animationSteps[j-1][1];
+								break;
+							case 'l':
+							case 'L':
+								animationSteps[j][0] = animationSteps[j-1][0];
+								animationSteps[j][1] = animationSteps[j-1][1]-1;
+								break;
+							case 'r':
+							case 'R':
+								animationSteps[j][0] = animationSteps[j-1][0];
+								animationSteps[j][1] = animationSteps[j-1][1]+1;
+								break;
+						}
+					}
+				}
+				for(i=0; i<13; i++){//counts how many moves on animation table are
+					if(animationSteps[i][0] == 0){
+						break;
+					}
+				}
+				animationStepsLength = i;
+				if(attacking){//elenhos an kanei attack etsi oste na stamatisi mia thesi prin
+					animationStepsLength--;
+				}
+				//arhizei to animation
+				table[piece_i][piece_j] = '.';
+				table[animationSteps[0][0]][animationSteps[0][1]] = currentHero;
+				//kane clear
+				showtable(table, *y);
+				for(i=0;i<1000000000;i++);
+				for(i=1;i<animationStepsLength;i++){
+					table[animationSteps[i-1][0]][animationSteps[i-1][1]] = '.';
+					table[animationSteps[i][0]][animationSteps[i][1]] = currentHero;
+					//kane clear
+					showtable(table, *y);
+					for(i=0;i<1000000000;i++);
+				}
+				if(attacking){
+					combat();//epomenei sinartisi gia to pve. note: flag gia to pios kanei attack. 
 				}
 			}
 		}	
