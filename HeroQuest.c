@@ -207,7 +207,7 @@ void help(){
 
 int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHero){
 	int i, j, k, x=17, lose=1, wincount=0, animationSteps[13][2] = {0}, moveLength1=0, currentHero=0, attacking=0, MoveStrLength=0, moving=0, temp=0, countFlag=0;
-	int continueFlag=0, moveLength2=0, flag=0, steps=1, enoughMoves=1, minicount=1, direction1 = 0, movingPiece=0, piece_i=0, piece_j=0, correctMove=1, checked =0;
+	int continueFlag=0, moveLength2=0, flag=0, steps=1, enoughMoves=1, minicount=1, direction1 = 0, piece_i=0, piece_j=0, correctMove=1, checked =0;
 	int totallength=0, flagforl2=0, flagforl1 =0, direction2=0, new_piece_i=0, new_piece_j=0, final_piece_i=0, final_piece_j=0, animationStepsLength=0;
 	char move[13] = {0};
 	maketable(table, y, dif, herolist, 0, hcount);
@@ -415,7 +415,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 									continueFlag = 1;
 									break;
 								}
-								if(attacking && i == moveLength1 && table[new_piece_i-i][new_piece_j] <= '1' || table[new_piece_i-i][new_piece_j] >= '9'){
+								if(attacking && i == moveLength1 && (table[new_piece_i-i][new_piece_j] <= '1' || table[new_piece_i-i][new_piece_j] >= '9')){
 									continueFlag =1;
 									break;
 								}
@@ -439,7 +439,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 									continueFlag = 1;
 									break;
 								}
-								if(attacking && i == moveLength1 && table[new_piece_i+i][new_piece_j] <= '1' || table[new_piece_i+i][new_piece_j] >= '9'){
+								if(attacking && i == moveLength1 && (table[new_piece_i+i][new_piece_j] <= '1' || table[new_piece_i+i][new_piece_j] >= '9')){
 									continueFlag =1;
 									break;
 								}
@@ -463,7 +463,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 									continueFlag = 1;
 									break;
 								}
-								if(attacking && i == moveLength1 && table[new_piece_i][new_piece_j-i] <= '1' || table[new_piece_i][new_piece_j-i] >= '9'){
+								if(attacking && i == moveLength1 && (table[new_piece_i][new_piece_j-i] <= '1' || table[new_piece_i][new_piece_j-i] >= '9')){
 									continueFlag =1;
 									break;
 								}
@@ -487,7 +487,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 									continueFlag = 1;
 									break;
 								}
-								if(attacking && i == moveLength1 && table[new_piece_i][new_piece_j+i] <= '1' || table[new_piece_i][new_piece_j+i] >= '9'){
+								if(attacking && i == moveLength1 && (table[new_piece_i][new_piece_j+i] <= '1' || table[new_piece_i][new_piece_j+i] >= '9')){
 									continueFlag =1;
 									break;
 								}
@@ -526,7 +526,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 										continueFlag = 1;
 										break;
 									}
-									else if(attacking && i == moveLength2 && table[new_piece_i-i][new_piece_j] <= '1' || table[new_piece_i-i][new_piece_j] >= '9'){
+									else if(attacking && i == moveLength2 && (table[new_piece_i-i][new_piece_j] <= '1' || table[new_piece_i-i][new_piece_j]) >= '9'){
 										continueFlag = 1;
 										break;
 									}
@@ -548,7 +548,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 										continueFlag = 1;
 										break;
 									}
-									else if(attacking && i == moveLength2 && table[new_piece_i+i][new_piece_j] <= '1' || table[new_piece_i+i][new_piece_j] >= '9'){
+									else if(attacking && i == moveLength2 && (table[new_piece_i+i][new_piece_j] <= '1' || table[new_piece_i+i][new_piece_j] >= '9')){
 										continueFlag = 1;
 										break;
 									}
@@ -570,7 +570,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 										continueFlag = 1;
 										break;
 									}
-									else if(attacking && i == moveLength2 && table[new_piece_i][new_piece_j-i] <= '1' || table[new_piece_i][new_piece_j-i] >= '9'){
+									else if(attacking && i == moveLength2 && (table[new_piece_i][new_piece_j-i] <= '1' || table[new_piece_i][new_piece_j-i] >= '9')){
 										continueFlag = 1;
 										break;
 									}
@@ -592,7 +592,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 										continueFlag = 1;
 										break;
 									}
-									else if(attacking && i == moveLength2 && table[new_piece_i][new_piece_j+i] <= '1' || table[new_piece_i][new_piece_j+i] >= '9'){
+									else if(attacking && i == moveLength2 && (table[new_piece_i][new_piece_j+i] <= '1' || table[new_piece_i][new_piece_j+i] >= '9')){
 										continueFlag = 1;
 										break;
 									}
@@ -695,6 +695,7 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 			}
 		}	
 	}
+	return 0;
 }
 
 void settings(int *pdif, int *pheros){
@@ -727,7 +728,7 @@ void settings(int *pdif, int *pheros){
 
 			for(int i = 0; i < 1000000000; i++);
 
-			while(*pdif > 3 || pdif<1){
+			while(*pdif > 3 || *pdif<1){
 			printf("\033[3;37mPlease give a number in range of [1-4]:\033[0m ");
 				scanf("%d", pdif);
 				printf("\n");
@@ -749,7 +750,7 @@ void settings(int *pdif, int *pheros){
 
 
 void maketable(int **table, int *n, int dif, int *herolist, int flag, int hcount){
-	int i, j, k=0, m=17, ishashtag, luckm =0, luckn=0, mcount=0, hcount=0, monster_max=0, health=0;
+	int i, j, k=0, m=17, ishashtag, luckm =0, luckn=0, mcount=0, monster_max=0, health=0;
 	if (flag){
 		//kane realloc edw. EDIT: Den kserw an doulevei swsta. test it
 		int tempn = *n;
