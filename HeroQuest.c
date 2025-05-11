@@ -208,7 +208,7 @@ void help(){
 int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHero){
 	int i, j, k, x=17, lose=1, wincount=0, final_i, attacks=0, final_j, temp_i, temp_j, moveLength1=0, currentHero=0, attacking=0, MoveStrLength=0, moving=0, temp=0, countFlag=0;
 	int doubleDigit=0, continueFlag=0, moveLength2=0, flag=0, steps=1, enoughMoves=1, minicount=1, direction1 = 0, movingPiece=0, piece_i=0, piece_j=0, correctMove=1, checked =0;
-	int totallength=0, flagforl2=0, flagforl1 =0, direction2=0;
+	int totallength=0, flagforl2=0, flagforl1 =0, direction2=0, new_piece_i=0, new_piece_j=0, final_piece_i=0, final_piece_j=0; //min anisihis gia tis metavlites polles apo autes den hrisimopiounte kai tha poun bye bye later
 	char move[20] = {0};
 	maketable(table, y, dif, herolist, 0, hcount);
 	while(lose){ //flag if player loses, game ends
@@ -239,6 +239,12 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 					moveLength2 =0;
 					direction1=0;
 					direction2=0;
+					new_piece_i=0;
+					new_piece_j=0;
+					final_piece_i=0;
+					final_piece_j=0;
+					flagforl2=0;
+					flagforl1 =0;
 					printf("What is your move? (if you dont want to make more moves press n/N):\n");
 					fgets(move, 20, stdin);
 					if(move[0] == 'n' || move[0] == 'N'){ //elenhos gia to an o paihtis thelei na kaeni alles kinisis
@@ -392,8 +398,8 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 					if(steps < totallength){ //ean o hristis zitise parapano vimata apo oti mporei o hroas na kanei
 						continue;
 					}
-					for(i=0; i<=moveLength1; i++){
-						switch(direction1){
+					for(i=0; i<=moveLength1; i++){//checks for obsticles on first direction
+						switch(direction1){//checkarei gia empodia sto proto direction
 							case 'u':
 							case 'U':
 								if((table[piece_i-i][piece_j] >= 'A' && table[piece_i-i][piece_j] <= 'z') || table[piece_i-i][piece_j]=='#' || table[piece_i-i][piece_j] == '@')
@@ -405,11 +411,175 @@ int play(int dif, int **table, int *y, int *herolist, int hcount, int *healthHer
 									continueFlag = 1;
 									break;
 								}
-								else if(i != moveLength1-1 && attacking){
-									
+								else if(i != moveLength1-1 && attacking && table[piece_i-i][piece_j] >= '1' && table[piece_i-i][piece_j] <= '9'){
+									continueFlag = 1;
+									break;
 								}
+								new_piece_i = piece_i - i;
+								new_piece_j = piece_j;
+								final_piece_i = new_piece_i - i;
+								final_piece_j = new_piece_j;
+								break;
+							case 'd':
+							case 'D':
+								if((table[piece_i+i][piece_j] >= 'A' && table[piece_i+i][piece_j] <= 'z') || table[piece_i+i][piece_j]=='#' || table[piece_i+i][piece_j] == '@')
+								{
+									continueFlag=1;
+									break;
+								}
+								else if(!attacking && table[piece_i+i][piece_j] >= '1' && table[piece_i+i][piece_j] <= '9'){
+									continueFlag = 1;
+									break;
+								}
+								else if(i != moveLength1-1 && attacking && (table[piece_i+i][piece_j] >= '1' && table[piece_i+i][piece_j] <= '9')){
+									continueFlag = 1;
+									break;
+								}
+								new_piece_i = piece_i + i;
+								new_piece_j = piece_j;
+								final_piece_i = new_piece_i + i;
+								final_piece_j = new_piece_j;
+								break;
+							case 'l':
+							case 'L':
+								if((table[piece_i][piece_j-i] >= 'A' && table[piece_i][piece_j-i] <= 'z') || table[piece_i][piece_j-i]=='#' || table[piece_i][piece_j-i] == '@')
+								{
+									continueFlag=1;
+									break;
+								}
+								else if(!attacking && table[piece_i][piece_j-i] >= '1' && table[piece_i][piece_j-i] <= '9'){
+									continueFlag = 1;
+									break;
+								}
+								else if(i != moveLength1-1 && attacking && (table[piece_i][piece_j-i] >= '1' && table[piece_i][piece_j-i] <= '9')){
+									continueFlag = 1;
+									break;
+								}
+								new_piece_i = piece_i;
+								new_piece_j = piece_j - i;
+								final_piece_i = new_piece_i;
+								final_piece_j = new_piece_j - i;
+								break;
+							case 'r':
+							case 'R':
+								if((table[piece_i][piece_j+i] >= 'A' && table[piece_i][piece_j+i] <= 'z') || table[piece_i][piece_j+i]=='#' || table[piece_i][piece_j+i] == '@')
+								{
+									continueFlag=1;
+									break;
+								}
+								else if(!attacking && table[piece_i][piece_j+i] >= '1' && table[piece_i][piece_j+i] <= '9'){
+									continueFlag = 1;
+									break;
+								}
+								else if(i != moveLength1-1 && attacking && (table[piece_i][piece_j+i] >= '1' && table[piece_i][piece_j+i] <= '9')){
+									continueFlag = 1;
+									break;
+								}
+								new_piece_i = piece_i;
+								new_piece_j = piece_j + i;
+								final_piece_i = new_piece_i;
+								final_piece_j = new_piece_j + i;
+								break;
+							default:
+								// no problems
+								break;
+							
+						}
+						if(continueFlag){
+							break;
 						}
 					}
+					if(continueFlag){
+						continue;
+					}
+					if(checked){// if existed, checks obsticles for second direction
+						for(i=0; i<moveLength2; i++){
+							switch(direction2){
+								case 'u':
+								case 'U':
+									if((table[new_piece_i-i][new_piece_j] >= 'A' && table[new_piece_i-i][new_piece_j] <= 'z') || table[new_piece_i-i][new_piece_j]=='#' || table[new_piece_i-i][new_piece_j] == '@')
+									{
+										continueFlag=1;
+										break;
+									}
+									else if(!attacking && table[new_piece_i-i][new_piece_j] >= '1' && table[new_piece_i-i][new_piece_j] <= '9'){
+										continueFlag = 1;
+										break;
+									}
+									else if(i != moveLength1-1 && attacking && table[new_piece_i-i][new_piece_j] >= '1' && table[new_piece_i-i][new_piece_j] <= '9'){
+										continueFlag = 1;
+										break;
+									}
+									final_piece_i = new_piece_i - i;
+									final_piece_j = new_piece_j;
+									break;
+								case 'd':
+								case 'D':
+									if((table[new_piece_i+i][new_piece_j] >= 'A' && table[new_piece_i+i][new_piece_j] <= 'z') || table[new_piece_i+i][new_piece_j]=='#' || table[new_piece_i+i][new_piece_j] == '@')
+									{
+										continueFlag=1;
+										break;
+									}
+									else if(!attacking && table[new_piece_i+i][new_piece_j] >= '1' && table[new_piece_i+i][new_piece_j] <= '9'){
+										continueFlag = 1;
+										break;
+									}
+									else if(i != moveLength1-1 && attacking && (table[new_piece_i+i][new_piece_j] >= '1' && table[new_piece_i+i][new_piece_j] <= '9')){
+										continueFlag = 1;
+										break;
+									}
+									final_piece_i = new_piece_i + i;
+									final_piece_j = new_piece_j;
+									break;
+								case 'l':
+								case 'L':
+									if((table[new_piece_i][new_piece_j-i] >= 'A' && table[new_piece_i][new_piece_j-i] <= 'z') || table[new_piece_i][new_piece_j-i]=='#' || table[new_piece_i][new_piece_j-i] == '@')
+									{
+										continueFlag=1;
+										break;
+									}
+									else if(!attacking && table[new_piece_i][new_piece_j-i] >= '1' && table[new_piece_i][new_piece_j-i] <= '9'){
+										continueFlag = 1;
+										break;
+									}
+									else if(i != moveLength1-1 && attacking && (table[new_piece_i][new_piece_j-i] >= '1' && table[new_piece_i][new_piece_j-i] <= '9')){
+										continueFlag = 1;
+										break;
+									}
+									final_piece_i = new_piece_i;
+									final_piece_j = new_piece_j - i;
+									break;
+								case 'r':
+								case 'R':
+									if((table[new_piece_i][new_piece_j+i] >= 'A' && table[new_piece_i][new_piece_j+i] <= 'z') || table[new_piece_i][new_piece_j+i]=='#' || table[new_piece_i][new_piece_j+i] == '@')
+									{
+										continueFlag=1;
+										break;
+									}
+									else if(!attacking && table[new_piece_i][new_piece_j+i] >= '1' && table[new_piece_i][new_piece_j+i] <= '9'){
+										continueFlag = 1;
+										break;
+									}
+									else if(i != moveLength1-1 && attacking && (table[new_piece_i][new_piece_j+i] >= '1' && table[new_piece_i][new_piece_j+i] <= '9')){
+										continueFlag = 1;
+										break;
+									}
+									final_piece_i = new_piece_i;
+									final_piece_j = new_piece_j + i;
+									break;
+								default:
+									// no problems
+									break;
+							}	
+							if(continueFlag){
+								break;
+							}
+						}
+					}
+					if(continueFlag){
+						continue;
+					}
+					
 				}
 			}
 		}	
