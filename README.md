@@ -51,16 +51,15 @@ Good luck and have fun!
 
 ![lol](https://github.com/user-attachments/assets/7f058792-bdd2-45f6-955f-a053f9f4cb85)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
-* * 
-* * 
-* * 
-* * 
-* * 
-* * 
-* * 
-
+<div align="center">
 
 [![In the End - Linkin Park](https://img.youtube.com/vi/eVTXPUF4Oz4/0.jpg)](https://www.youtube.com/watch?v=eVTXPUF4Oz4)
 
@@ -72,5 +71,8 @@ Good luck and have fun!
 *To lose it all*  
 *But in the end*  
 *It doesn't even matter*
+
+</div>
+
 
 
